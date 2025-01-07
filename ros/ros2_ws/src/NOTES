@@ -1,5 +1,0 @@
-# Initialize
-ros2 pkg create --build-type ament_python fizzbuzz
-
-# Build
-colcon build
