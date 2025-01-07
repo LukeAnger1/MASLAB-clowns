@@ -4,11 +4,13 @@
   <name>fizzbuzz</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="anger.luke2004@gmail.com">rick-sanchez</maintainer>
+  <maintainer email="maslab-2024-vm@mit.edu">maslab</maintainer>
   <license>TODO: License declaration</license>
 
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
+  <exec_depend>fizzbuzz_interfaces</exec_depend>
+  <exec_depend>ros2launch</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
