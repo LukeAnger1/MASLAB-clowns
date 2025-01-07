@@ -1,0 +1,2 @@
+# Test code to listen to a publisher with the name numbers
+ros2 topic echo numbers
