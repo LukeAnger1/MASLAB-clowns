@@ -1,3 +1,0 @@
-[console_scripts]
-fizzbuzz_subscriber = fizzbuzz.fizzbuzz_subscriber_node:main
-number_publisher = fizzbuzz.number_publisher_node:main
