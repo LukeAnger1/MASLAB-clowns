@@ -1,0 +1,242 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-8f0a40114a15b784b5ef.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18
+					]
+				},
+				{
+					"build" : "fizzbuzz_interfaces__py",
+					"jsonFile" : "directory-fizzbuzz_interfaces__py-c2fc416cf091a426a911.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/home/rick-sanchez/Desktop/MASLAB-clown-penis/ros2_ws/build/fizzbuzz_interfaces/fizzbuzz_interfaces__py",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "fizzbuzz_interfaces",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_fizzbuzz_interfaces_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_fizzbuzz_interfaces_egg-dd7bbf2ff2e339dc655b.json",
+					"name" : "ament_cmake_python_build_fizzbuzz_interfaces_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_copy_fizzbuzz_interfaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_copy_fizzbuzz_interfaces-6f55b1abd96c6fbdcaad.json",
+					"name" : "ament_cmake_python_copy_fizzbuzz_interfaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces-614534776ff8abbb6e98.json",
+					"name" : "fizzbuzz_interfaces",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces__cpp-9080e3c4afa982c5167a.json",
+					"name" : "fizzbuzz_interfaces__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "fizzbuzz_interfaces__py::@296dce696cbe66d5ae1c",
+					"jsonFile" : "target-fizzbuzz_interfaces__py-8f2f2c73e1eee2afd882.json",
+					"name" : "fizzbuzz_interfaces__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces__rosidl_generator_c-a9a57d5e6de27c0e2be7.json",
+					"name" : "fizzbuzz_interfaces__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces__rosidl_generator_py-7eb92d3f79406de8f22b.json",
+					"name" : "fizzbuzz_interfaces__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces__rosidl_generator_type_description::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces__rosidl_generator_type_description-f8f717d48bfe44364949.json",
+					"name" : "fizzbuzz_interfaces__rosidl_generator_type_description",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces__rosidl_typesupport_c-f2c47225c600e4f7bf8f.json",
+					"name" : "fizzbuzz_interfaces__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces__rosidl_typesupport_cpp-bcff6279b06bb4cdd15b.json",
+					"name" : "fizzbuzz_interfaces__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces__rosidl_typesupport_fastrtps_c-146159fa01508524226a.json",
+					"name" : "fizzbuzz_interfaces__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces__rosidl_typesupport_fastrtps_cpp-555e4e487e9ac835c29a.json",
+					"name" : "fizzbuzz_interfaces__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces__rosidl_typesupport_introspection_c-e7717dbefa4c1c1994de.json",
+					"name" : "fizzbuzz_interfaces__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces__rosidl_typesupport_introspection_cpp-c0186c2b268cfa1580f5.json",
+					"name" : "fizzbuzz_interfaces__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces_s__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces_s__rosidl_typesupport_c-aef2279a91cebc7760f6.json",
+					"name" : "fizzbuzz_interfaces_s__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces_s__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces_s__rosidl_typesupport_fastrtps_c-79db93f92196beaa45d0.json",
+					"name" : "fizzbuzz_interfaces_s__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces_s__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces_s__rosidl_typesupport_introspection_c-23827829da32432e41fd.json",
+					"name" : "fizzbuzz_interfaces_s__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fizzbuzz_interfaces_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fizzbuzz_interfaces_uninstall-98f16a46fe54dee7b356.json",
+					"name" : "fizzbuzz_interfaces_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-4c5a2d9a11110afc883a.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/rick-sanchez/Desktop/MASLAB-clown-penis/ros2_ws/build/fizzbuzz_interfaces",
+		"source" : "/home/rick-sanchez/Desktop/MASLAB-clown-penis/ros2_ws/src/fizzbuzz_interfaces"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
