@@ -37,4 +37,13 @@ echo "source /opt/ros/$ROS_VERSION/setup.bash" >> ~/.bashrc
 echo "export PIP_BREAK_SYSTEM_PACKAGES=1" >> ~/.bashrc
 source ~/.bashrc
 
+##### This is for the camera #####
+
+sudo apt install ros-jazzy-v4l2-camera -y
+sudo apt install ros-jazzy-image-transport-plugins -y
+sudo apt install python3-opencv -y
+sudo apt install ros-jazzy-cv-bridge -y
+
+##### This is for the camera #####
+
 echo "Installation finished!"
