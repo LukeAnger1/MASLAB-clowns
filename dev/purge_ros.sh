@@ -51,4 +51,13 @@ echo "Performing final cleanup"
 sudo apt autoremove -y
 sudo apt clean
 
+##### This is for the camera #####
+
+sudo apt purge ros-jazzy-v4l2-camera -y
+sudo apt purge ros-jazzy-image-transport-plugins -y
+sudo apt purge python3-opencv -y
+sudo apt purge ros-jazzy-cv-bridge -y
+
+##### This is for the camera #####
+
 echo "Uninstallation finished!"
