@@ -1,0 +1,10 @@
+If you encounter an issue try running
+source install/setup.bash
+source ~/.bashrc
+They have a bug in their code that tries to do this and fails
+
+ros2 run fizzbuzz number_publisher
+ros2 run v4l2_camera v4l2_camera_node
+ros2 run package_name executable_name --ros-args -p param1_name:=param1_value -p param2_name:=param2_value
+
+rqt to view camera
