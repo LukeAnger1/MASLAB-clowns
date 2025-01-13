@@ -11,6 +11,18 @@ image = cv2.imread(image_path)
 # Run object detection
 results = model(image)
 
+# Iterate over the results
+for result in results:
+    boxes = result.boxes      # Access bounding box outputs
+    masks = result.masks      # Access segmentation masks (if applicable)
+    keypoints = result.keypoints  # Access keypoints (if applicable)
+    probs = result.probs      # Access classification probabilities (if applicable)
+    obb = result.obb          # Access oriented bounding boxes (if applicable)
+
+    # Display or save the results
+    result.show()             # Display the image with annotations
+    result.save("output.jpg") # Save the annotated image
+
 # Extract the first result (since we're working with one image)
 result = results[0]
 
