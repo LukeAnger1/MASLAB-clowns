@@ -1,0 +1,16 @@
+# To set rules for manufacture to identifier go to
+/etc/udev/rules.d/
+# Create ur own .rules file example below
+SUBSYSTEM=="video4linux", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="0825", MODE:="0666", SYMLINK+="black"
+SUBSYSTEM=="video4linux", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="094d", MODE:="0666", SYMLINK+="grey"
+# To reload rules
+sudo udevadm control --reload
+
+# to view devices
+ls /dev/video*
+# or you might be able to use
+sudo udevadm info /dev/video3
+
+ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:="/dev/black"
+
+ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:="/dev/grey" --remap /image_raw:=/image_raw2
