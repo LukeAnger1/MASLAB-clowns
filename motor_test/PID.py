@@ -1,6 +1,7 @@
 
 from icm42688 import ICM42688
 import board
+import busio
 
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 
@@ -23,20 +24,45 @@ raven_board = Raven()
 # IMPORTANT TODO: Make sure to set the channel later
 
 # Set one motor
-raven_board.set_motor_encoder(Raven.MotorChannel.CH?1, 0) # Reset encoder
-raven_board.set_motor_mode(Raven.MotorChannel.CH?1, Raven.MotorMode.VELOCITY) # Set motor mode to VELOCITY
-raven_board.set_motor_pid(Raven.MotorChannel.CH?1, p_gain = 10, i_gain = 0, d_gain = 0) # Set PID values
+raven_board.set_motor_encoder(Raven.MotorChannel.CH1, 0) # Reset encoder
+raven_board.set_motor_mode(Raven.MotorChannel.CH1, Raven.MotorMode.VELOCITY) # Set motor mode to VELOCITY
+raven_board.set_motor_pid(Raven.MotorChannel.CH1, p_gain = 10, i_gain = 0, d_gain = 0) # Set PID values
 
 # Make the motor spin at -4400 counts/second (-10 rev/sec of wheel motor)
-raven_board.set_motor_target(Raven.MotorChannel.CH?1, -4400)
+raven_board.set_motor_target(Raven.MotorChannel.CH1, -4400)
 
 # Set the other motor
-raven_board.set_motor_encoder(Raven.MotorChannel.CH?2, 0) # Reset encoder
-raven_board.set_motor_mode(Raven.MotorChannel.CH?2, Raven.MotorMode.VELOCITY) # Set motor mode to VELOCITY
-raven_board.set_motor_pid(Raven.MotorChannel.CH?2, p_gain = 10, i_gain = 0, d_gain = 0) # Set PID values
+raven_board.set_motor_encoder(Raven.MotorChannel.CH2, 0) # Reset encoder
+raven_board.set_motor_mode(Raven.MotorChannel.CH2, Raven.MotorMode.VELOCITY) # Set motor mode to VELOCITY
+raven_board.set_motor_pid(Raven.MotorChannel.CH2, p_gain = 10, i_gain = 0, d_gain = 0) # Set PID values
 
 # Make the motor spin at -4400 counts/second (-10 rev/sec of wheel motor)
-raven_board.set_motor_target(Raven.MotorChannel.CH?2, -4400)
+raven_board.set_motor_target(Raven.MotorChannel.CH2, -4400)
+
+
+
+
+
+
+
+raven_board.set_motor_mode(Raven.MotorChannel.CH5, Raven.MotorMode.DIRECT)
+
+raven_board.set_motor_torque_factor(Raven.MotorChannel.CH5, 10)
+raven_board.set_motor_speed_factor(Raven.MotorChannel.CH5, 10)
+
+raven_board.set_motor_mode(Raven.MotorChannel.CH4, Raven.MotorMode.DIRECT)
+
+raven_board.set_motor_torque_factor(Raven.MotorChannel.CH4, 10)
+raven_board.set_motor_speed_factor(Raven.MotorChannel.CH4, 10, reverse=True)
+
+
+
+
+while True:
+   pass
+
+print("made it here")
+exit()
 
 while True:
   accel, gyro = imu.get_data()
