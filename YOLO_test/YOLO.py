@@ -2,6 +2,9 @@ from ultralytics import YOLO
 import cv2
 import numpy as np
 
+
+# make sure distance calculation accounts for camera height being off the floor where the blocks are
+
 # Load a YOLO model (pre-trained YOLOv8 nano model)
 model = YOLO('yolov8n.pt')  # Replace with your model if needed
 
