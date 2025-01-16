@@ -39,10 +39,10 @@ source ~/.bashrc
 
 ##### This is for the camera #####
 
-sudo apt install ros-jazzy-v4l2-camera -y
-sudo apt install ros-jazzy-image-transport-plugins -y
-sudo apt install python3-opencv -y
-sudo apt install ros-jazzy-cv-bridge -y
+sudo apt install -y ros-jazzy-v4l2-camera
+sudo apt install -y ros-jazzy-image-transport-plugins
+sudo apt install -y python3-opencv
+sudo apt install -y ros-jazzy-cv-bridge
 
 ##### This is for the camera #####
 
