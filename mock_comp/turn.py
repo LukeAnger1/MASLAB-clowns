@@ -11,9 +11,9 @@ radians = 0
 RADIANS_MULTIPLIER = 5
 
 # This constant is the goal speed
-GOAL_SPEED = 10
+GOAL_SPEED = 20
 
-def set_motor(radians):
+if __name__=="__main__":
 
     angle_measurement = radians * RADIANS_MULTIPLIER
 
@@ -29,4 +29,5 @@ def set_motor(radians):
     raven_board.set_motor_torque_factor(Raven.MotorChannel.CH5, 100)
     raven_board.set_motor_speed_factor(Raven.MotorChannel.CH5, GOAL_SPEED + angle_measurement, reverse=True)
 
-    sleep(.2)
+    while(True):
+        pass
