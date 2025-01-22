@@ -1,5 +1,7 @@
 from raven.raven import Raven
 
+from time import sleep
+
 raven_board = Raven()
 
 # Do angles in radians
@@ -26,3 +28,5 @@ def set_motor(radians):
 
     raven_board.set_motor_torque_factor(Raven.MotorChannel.CH5, 100)
     raven_board.set_motor_speed_factor(Raven.MotorChannel.CH5, GOAL_SPEED + angle_measurement, reverse=True)
+
+    sleep(.2)
