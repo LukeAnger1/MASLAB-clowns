@@ -16,13 +16,13 @@ ANGLE_MEASUREMENT = radians * RADIANS_MULTIPLIER
 # Set one motor
 raven_board.set_motor_mode(Raven.MotorChannel.CH4, Raven.MotorMode.DIRECT)
 
-raven_board.set_motor_torque_factor(Raven.MotorChannel.CH4, 100)
+raven_board.set_motor_torque_factor(Raven.MotorChannel.CH4, 50)
 raven_board.set_motor_speed_factor(Raven.MotorChannel.CH4, GOAL_SPEED - ANGLE_MEASUREMENT)
 
 # Set the other motor
 raven_board.set_motor_mode(Raven.MotorChannel.CH5, Raven.MotorMode.DIRECT)
 
-raven_board.set_motor_torque_factor(Raven.MotorChannel.CH5, 100)
+raven_board.set_motor_torque_factor(Raven.MotorChannel.CH5, 50)
 raven_board.set_motor_speed_factor(Raven.MotorChannel.CH5, GOAL_SPEED + ANGLE_MEASUREMENT, reverse=True)
 
 while True:
