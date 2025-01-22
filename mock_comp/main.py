@@ -8,7 +8,7 @@ while True:
     image = get_image()
 
     # Pass the image into block placement
-    ditance, angle = get_block_placement()
+    ditance, angle = get_block_placement(image)
 
     # Set the motor speeds
     set_motor(angle)
