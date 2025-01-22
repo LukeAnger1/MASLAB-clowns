@@ -1,14 +1,15 @@
 # program to capture single image from webcam in python 
 
 # importing OpenCV library 
-from cv2 import *
+# from cv2 import *
+import cv2
 
 # initialize the camera 
 # If you have multiple camera connected with 
 # current device, assign a value in cam_port 
 # variable according to that 
 cam_port = 0
-cam = VideoCapture(cam_port) 
+cam = cv2.VideoCapture(cam_port) 
 
 def get_image():
 	global cam
@@ -30,8 +31,8 @@ def get_camera_shape():
 	global cam
 	
 	# Get the default frame width and height
-	frame_width = int(cam.get(CAP_PROP_FRAME_WIDTH))
-	frame_height = int(cam.get(CAP_PROP_FRAME_HEIGHT))
+	frame_width = int(cam.get(cv2.CAP_PROP_FRAME_WIDTH))
+	frame_height = int(cam.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 	return (frame_width, frame_height)
 
