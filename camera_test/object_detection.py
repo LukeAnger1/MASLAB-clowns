@@ -24,23 +24,48 @@ def compute_distance(image):
     # Convert the image to HSV
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
+    green_lower = np.array([40, 40, 40])  # Lower bound for green color
+    green_upper = np.array([80, 255, 255])  # Upper bound for green color
+
+    # IMPORTANT TODO: We need to fine tune this to hit the red/green cubes, this mask isnt hitting the contours
     # Apply a mask to the image
-    mask = cv2.inRange(
+    mask_green = cv2.inRange(
         hsv_image,
-        np.array([60, 100, 100]),
-        np.array([90, 200, 200])
+        green_lower,
+        green_upper
+        # np.array([60, 100, 100]),
+        # np.array([90, 200, 200])
     )
 
-    contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # Define the lower and upper bounds for red color
+    lower_red1 = np.array([0, 100, 100])
+    upper_red1 = np.array([10, 255, 255])
+    lower_red2 = np.array([160, 100, 100])
+    upper_red2 = np.array([179, 255, 255])
+
+    # Create masks for the two red ranges
+    mask1 = cv2.inRange(hsv_image, lower_red1, upper_red1)
+    mask2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
+
+    # Combine the masks to detect both ranges of red
+    mask_red = mask1 + mask2
+
+    # Apply the mask to the image
+    result = cv2.bitwise_and(image, image, mask=mask_red)
+
+    contours, _ = cv2.findContours(mask_red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+    print(f'right before the contours')
 
     # Check contours
     if contours:
         # Get the largest contour
         max_contour = max(contours, key=cv2.contourArea)
 
+        print(f'getting the bounding rectanlges')
         # Find the bounding rectangle
         x, y, w, h = cv2.boundingRect(max_contour)
-
+        print(f'after getting the bounding recctangles')
         # Calculate the contour width, in pixels
         width = np.sqrt(cv2.contourArea(max_contour))
 
@@ -49,8 +74,10 @@ def compute_distance(image):
     
         # Calculate the object's distance from its width (centimeters)
         if width != 0:
+            print(f'the width is not zero')
             distance = OBJECT_WIDTH * frame_width / width * CALIBRATION * 100
         else:
+            print(f'the width is zero')
             distance = None
 
         return distance, x, y, w, h
