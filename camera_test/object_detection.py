@@ -51,23 +51,26 @@ def compute_distance(image):
     mask_red = mask1 + mask2
 
     # Apply the mask to the image
-    result = cv2.bitwise_and(image, image, mask=mask_red)
+    # result = cv2.bitwise_and(image, image, mask=mask_red)
 
     contours, _ = cv2.findContours(mask_red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     print(f'right before the contours')
 
-    # Check contours
-    if contours:
-        # Get the largest contour
-        max_contour = max(contours, key=cv2.contourArea)
+    # Get the largest contour
+    # max_contour = max(contours, key=cv2.contourArea)
+
+    answer = []
+
+    # Go through the contours and get them added to the array
+    for contour in contours:
 
         print(f'getting the bounding rectanlges')
         # Find the bounding rectangle
-        x, y, w, h = cv2.boundingRect(max_contour)
+        x, y, w, h = cv2.boundingRect(contour)
         print(f'after getting the bounding recctangles')
         # Calculate the contour width, in pixels
-        width = np.sqrt(cv2.contourArea(max_contour))
+        width = np.sqrt(cv2.contourArea(contour))
 
         # Get the frame width, in pixels
         frame_width = bgr_image.shape[1]
@@ -80,9 +83,9 @@ def compute_distance(image):
             print(f'the width is zero')
             distance = None
 
-        return distance, x, y, w, h
+        answer.append((distance, x, y, w, h))
     
-    return None, None, None, None, None
+    return answer
 
 if __name__ == "__main__":
     while True:
@@ -90,25 +93,25 @@ if __name__ == "__main__":
         _, bgr_image = capture.read()
 
         # Calculate the distance
-        distance, x, y, w, h = compute_distance(bgr_image)
+        for distance, x, y, w, h in compute_distance(bgr_image):
         
-        # Make sure that the distance is a meaningful number
-        if distance is None or distance == float("inf") or distance == float("-inf") or distance != distance:
-            pass
-        else:
-            # Display the bounding box
-            cv2.rectangle(bgr_image, (x, y), (x + w, y + h), (0, 0, 255), 2)
+            # Make sure that the distance is a meaningful number
+            if distance is None or distance == float("inf") or distance == float("-inf") or distance != distance:
+                pass
+            else:
+                # Display the bounding box
+                cv2.rectangle(bgr_image, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-            # Display the contour size
-            cv2.putText(
-                bgr_image,
-                f"{round(distance)} cm",
-                (x, y-10),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0, 0, 255),
-                2
-            )
+                # Display the contour size
+                cv2.putText(
+                    bgr_image,
+                    f"{round(distance)} cm",
+                    (x, y-10),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1,
+                    (0, 0, 255),
+                    2
+                )
 
         # Display the frame in the video feed
         # NOTE: `cv2.imshow` takes images in BGR
