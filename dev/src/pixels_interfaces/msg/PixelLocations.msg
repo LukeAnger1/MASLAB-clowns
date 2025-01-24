@@ -1,2 +1,2 @@
-int32 green_pixel_locations # This is a 32 bit pixel location representation, the first 16 bits represent the x and the last 16 bits represent the y. The color is green_pixel_location
-int32 red_pixel_locations # This is the same thing but for red
+int32[] green_pixel_locations # This is a 32 bit pixel location representation, the first 16 bits represent the x and the last 16 bits represent the y. The color is green_pixel_location
+int32[] red_pixel_locations # This is the same thing but for red
