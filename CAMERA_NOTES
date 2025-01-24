@@ -13,11 +13,11 @@ sudo udevadm info /dev/video3
 
 
 # The below are for the Pi
-ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:="/dev/black" -p camera_info_url:=file://home/team17/MASLAB-clownPen-15/camera_test/black/ost.yaml
+ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:="/dev/black" -p camera_info_url:="file:///home/team17/MASLAB-clownPen-15/camera_test/black/ost.yaml"
 
-ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:="/dev/grey" -p camera_info_url:=file://home/team17/MASLAB-clownPen-15/camera_test/grey/ost.yaml --remap /image_raw:=/image_raw2
+ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:="/dev/grey" -p camera_info_url:="file:///home/team17/MASLAB-clownPen-15/camera_test/grey/ost.yaml" --remap /image_raw:=/image_raw2
 
 # The below are for Lukes computer (this is because of the different absolute file paths)
-ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:="/dev/black" -p camera_info_url:=file://home/maslab-clown-penis/Desktop/MASLAB-clownPen-15/camera_test/black/ost.yaml
+ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:="/dev/black" -p camera_info_url:="file:///home/maslab-clown-penis/Desktop/MASLAB-clownPen-15/camera_test/black/ost.yaml"
 
-ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:="/dev/grey" -p camera_info_url:=file://home/maslab-clown-penis/Desktop/MASLAB-clownPen-15/camera_test/grey/ost.yaml --remap /image_raw:=/image_raw2
+ros2 run v4l2_camera v4l2_camera_node --ros-args -p video_device:="/dev/grey" -p camera_info_url:="file:///home/maslab-clown-penis/Desktop/MASLAB-clownPen-15/camera_test/grey/ost.yaml" --remap /image_raw:=/image_raw2
