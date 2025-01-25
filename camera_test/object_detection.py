@@ -17,7 +17,7 @@ CALIBRATION = 1
 # Object width (meters)
 OBJECT_WIDTH = 8.48e-2
 
-def compute_distance(image):
+def get_possible_pixel_locations(image):
     """
     Compute the distance of the block, given an image
     """
@@ -88,7 +88,7 @@ if __name__ == "__main__":
         # Read a frame
         _, bgr_image = capture.read()
 
-        green_pixels, red_pixels = compute_distance(bgr_image)
+        green_pixels, red_pixels = get_possible_pixel_locations(bgr_image)
 
         # Calculate the distance
         for x, y in green_pixels:
