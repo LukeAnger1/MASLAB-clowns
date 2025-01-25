@@ -59,20 +59,25 @@ class CubeLocate(Node):
 
     def convert_int32_to_pixel_location(self, value):
 
-        x, y = value >> 16, value & (1<<16-1)
+        x = value >> 16
+        y = value & ((1<<16)-1)
 
         # Undo the shift here
         shift = 1 << 15
+        shift = np.int32(shift)
         x, y = x-shift, y-shift
 
-        return np.int32((x, y))
+        # IMPORTANT NOTE: CHECHY BS
+        if x < -300:
+            x += 65536
+
+        return (x, y)
     
     def convert_map_location_to_int32(self, x, y):
-        # Convert to int 32
-        x, y = np.int32(x), np.int32(y)
-
+        
         # Add this number to gaurantee they are always positive when doing the encoding
         shift = 1 << 15
+        shift = np.int32(shift)
         x, y = x+shift, y+shift
 
         return np.int32((x << 16) + y)

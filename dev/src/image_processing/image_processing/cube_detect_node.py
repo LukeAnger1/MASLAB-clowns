@@ -86,11 +86,9 @@ class CubeDetect(Node):
         return answer_green, answer_red
 
     def convert_pixel_location_to_int32(self, x, y):
-        # Convert to int 32
-        x, y = np.int32(x), np.int32(y)
-
         # Add this number to gaurantee they are always positive when doing the encoding
         shift = 1 << 15
+        shift = np.int32(shift)
         x, y = x+shift, y+shift
 
         return np.int32((x << 16) + y)
