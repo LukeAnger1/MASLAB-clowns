@@ -9,7 +9,11 @@ import cv2
 import numpy as np
 
 # Capture video from webcam
-capture = cv2.VideoCapture(0)
+capture = cv2.VideoCapture(1)
+
+if not capture.isOpened():
+    print("Error: Could not access the webcam.")
+    exit()
 
 # Calibration parameter (focal length over sensor width)
 CALIBRATION = 1
@@ -17,112 +21,113 @@ CALIBRATION = 1
 # Object width (meters)
 OBJECT_WIDTH = 8.48e-2
 
-def get_possible_pixel_locations(image):
+def get_possible_pixel_locations_with_blur(image):
     """
-    Compute the distance of the block, given an image
+    Detect green and red objects in the image while reducing noise.
+    IMPORTANT: The lists it returns are (x, y, w, h), not (x, y)
+        Use on the display with boxes
     """
-    # Convert the image to HSV
+    # Convert the image to HSV color space
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    green_lower = np.array([40, 40, 40])  # Lower bound for green color
-    green_upper = np.array([80, 255, 255])  # Upper bound for green color
+    # Apply Gaussian blur to reduce noise
+    blur_factor = 7
+    blurred_image = cv2.GaussianBlur(hsv_image, (blur_factor, blur_factor), 0)
 
-    # IMPORTANT TODO: We need to fine tune this to hit the red/green cubes, this mask isnt hitting the contours
-    # Apply a mask to the image
-    mask_green = cv2.inRange(
-        hsv_image,
-        green_lower,
-        green_upper
-    )
-
-    # Define the lower and upper bounds for red color
+    # Define color ranges
+    green_lower = np.array([40, 40, 40])
+    green_upper = np.array([80, 255, 255])
     lower_red1 = np.array([0, 100, 100])
     upper_red1 = np.array([10, 255, 255])
     lower_red2 = np.array([160, 100, 100])
     upper_red2 = np.array([179, 255, 255])
 
-    # Create masks for the two red ranges
-    mask1 = cv2.inRange(hsv_image, lower_red1, upper_red1)
-    mask2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
+    # Create masks
+    mask_green = cv2.inRange(blurred_image, green_lower, green_upper)
+    mask_red = cv2.inRange(blurred_image, lower_red1, upper_red1) + cv2.inRange(blurred_image, lower_red2, upper_red2)
 
-    # Combine the masks to detect both ranges of red
-    mask_red = mask1 + mask2
+    # Apply morphological operations
+    kernel = np.ones((5, 5), np.uint8)
+    mask_green = cv2.erode(mask_green, kernel, iterations=1)
+    mask_green = cv2.dilate(mask_green, kernel, iterations=2)
+    mask_red = cv2.erode(mask_red, kernel, iterations=1)
+    mask_red = cv2.dilate(mask_red, kernel, iterations=2)
 
+    # Find contours
     contours_green, _ = cv2.findContours(mask_green, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours_red, _ = cv2.findContours(mask_red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
+    # filtered_green = filter_overlapping_contours(contours_green)
+    # filtered_red = filter_overlapping_contours(contours_red)
+
     answer_green, answer_red = [], []
 
-    # Go through the contours and get them added to the array
+    # Filter contours by size
     for contour in contours_green:
-
-        # Find the bounding rectangle
+        area = cv2.contourArea(contour)
+        if area < 500:  # Filter out small contours
+            continue
         x, y, w, h = cv2.boundingRect(contour)
-        # Calculate the contour width, in pixels
-        width = np.sqrt(cv2.contourArea(contour))
+        answer_green.append((x, y, w, h))
 
-        # Get the frame width, in pixels
-        frame_width = bgr_image.shape[1]
-    
-        # Get the location of the pixel in the bottom middle
-        answer_green.append((x+w//2, y))
-
-    # Go through the contours and get them added to the array
     for contour in contours_red:
-
-        # Find the bounding rectangle
+        area = cv2.contourArea(contour)
+        if area < 500:  # Filter out small contours
+            continue
         x, y, w, h = cv2.boundingRect(contour)
-        # Calculate the contour width, in pixels
-        width = np.sqrt(cv2.contourArea(contour))
+        answer_red.append((x, y, w, h))
 
-        # Get the frame width, in pixels
-        frame_width = bgr_image.shape[1]
+
+    return answer_green, answer_red
+
+   
+
+def filter_overlapping_contours(contours):
+    '''
+    Takes in a list of contours
+    TO DO: eliminate overlapping boxes, keeping the biggest area
+    '''
+    pass
+
+def display_pixels_with_boxes(pixels, color):
+    '''
+    Displays the pixels on the screen.
+    Pixels: list of pixels in output from get_possible_pixel_locations_with_blur
+    IMPORTANT: pixels include (x, y, w, h)! not (x,y)
+    Color: string of 'green' or 'red' for now
+    '''
+    if color == 'green':
+        color_tuple = (0, 255, 0)
+    else:    
+        color_tuple = (0, 0, 255)
+    # Calculate the distance
+    for x, y, w, h in pixels:
     
-        # Get the location of the pixel in the bottom middle
-        answer_red.append((x+w//2, y))
-    
-    return (answer_green, answer_red)
+        # Display the bounding box
+        cv2.rectangle(bgr_image, (x, y), (x + w, y + h), color_tuple, 2)
+
+        # Display the contour size
+        cv2.putText(
+            bgr_image,
+            color + ' pixel',
+            (x, y-10),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            color_tuple,
+            2
+        )
 
 if __name__ == "__main__":
     while True:
         # Read a frame
         _, bgr_image = capture.read()
 
-        green_pixels, red_pixels = get_possible_pixel_locations(bgr_image)
+        green_pixels, red_pixels = get_possible_pixel_locations_with_blur(bgr_image)
 
-        # Calculate the distance
-        for x, y in green_pixels:
-        
-            # Display the bounding box
-            cv2.rectangle(bgr_image, (x, y), (x, y), (0, 255, 0), 2)
+        # display
+        display_pixels_with_boxes(green_pixels, 'green')
+        display_pixels_with_boxes(red_pixels, 'red')
 
-            # Display the contour size
-            cv2.putText(
-                bgr_image,
-                f'green pixel',
-                (x, y-10),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0, 255, 0),
-                2
-            )
-
-        # Calculate the distance
-        for x, y in red_pixels:
-        
-            # Display the bounding box
-            cv2.rectangle(bgr_image, (x, y), (x, y), (0, 0, 255), 2)
-
-            # Display the contour size
-            cv2.putText(
-                bgr_image,
-                f'red pixel',
-                (x, y-10),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1,
-                (0, 0, 255),
-                2
-            )
 
         # Display the frame in the video feed
         # NOTE: `cv2.imshow` takes images in BGR
