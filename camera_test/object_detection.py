@@ -33,8 +33,6 @@ def compute_distance(image):
         hsv_image,
         green_lower,
         green_upper
-        # np.array([60, 100, 100]),
-        # np.array([90, 200, 200])
     )
 
     # Define the lower and upper bounds for red color
@@ -50,68 +48,81 @@ def compute_distance(image):
     # Combine the masks to detect both ranges of red
     mask_red = mask1 + mask2
 
-    # Apply the mask to the image
-    # result = cv2.bitwise_and(image, image, mask=mask_red)
+    contours_green, _ = cv2.findContours(mask_green, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours_red, _ = cv2.findContours(mask_red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    contours, _ = cv2.findContours(mask_red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-    print(f'right before the contours')
-
-    # Get the largest contour
-    # max_contour = max(contours, key=cv2.contourArea)
-
-    answer = []
+    answer_green, answer_red = [], []
 
     # Go through the contours and get them added to the array
-    for contour in contours:
+    for contour in contours_green:
 
-        print(f'getting the bounding rectanlges')
         # Find the bounding rectangle
         x, y, w, h = cv2.boundingRect(contour)
-        print(f'after getting the bounding recctangles')
         # Calculate the contour width, in pixels
         width = np.sqrt(cv2.contourArea(contour))
 
         # Get the frame width, in pixels
         frame_width = bgr_image.shape[1]
     
-        # Calculate the object's distance from its width (centimeters)
-        if width != 0:
-            print(f'the width is not zero')
-            distance = OBJECT_WIDTH * frame_width / width * CALIBRATION * 100
-        else:
-            print(f'the width is zero')
-            distance = None
+        # Get the location of the pixel in the bottom middle
+        answer_green.append((x+w//2, y))
 
-        answer.append((distance, x, y, w, h))
+    # Go through the contours and get them added to the array
+    for contour in contours_red:
+
+        # Find the bounding rectangle
+        x, y, w, h = cv2.boundingRect(contour)
+        # Calculate the contour width, in pixels
+        width = np.sqrt(cv2.contourArea(contour))
+
+        # Get the frame width, in pixels
+        frame_width = bgr_image.shape[1]
     
-    return answer
+        # Get the location of the pixel in the bottom middle
+        answer_red.append((x+w//2, y))
+    
+    return (answer_green, answer_red)
 
 if __name__ == "__main__":
     while True:
         # Read a frame
         _, bgr_image = capture.read()
 
-        # Calculate the distance
-        for distance, x, y, w, h in compute_distance(bgr_image):
-        
-            # Make sure that the distance is a meaningful number
-            if distance is None or distance == float("inf") or distance == float("-inf") or distance != distance:
-                pass
-            else:
-                # Display the bounding box
-                cv2.rectangle(bgr_image, (x, y), (x + w, y + h), (0, 0, 255), 2)
+        green_pixels, red_pixels = compute_distance(bgr_image)
 
-                # Display the contour size
-                cv2.putText(
-                    bgr_image,
-                    f"{round(distance)} cm",
-                    (x, y-10),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,
-                    (0, 0, 255),
-                    2
-                )
+        # Calculate the distance
+        for x, y in green_pixels:
+        
+            # Display the bounding box
+            cv2.rectangle(bgr_image, (x, y), (x, y), (0, 255, 0), 2)
+
+            # Display the contour size
+            cv2.putText(
+                bgr_image,
+                f'green pixel',
+                (x, y-10),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0, 255, 0),
+                2
+            )
+
+        # Calculate the distance
+        for x, y in red_pixels:
+        
+            # Display the bounding box
+            cv2.rectangle(bgr_image, (x, y), (x, y), (0, 0, 255), 2)
+
+            # Display the contour size
+            cv2.putText(
+                bgr_image,
+                f'red pixel',
+                (x, y-10),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1,
+                (0, 0, 255),
+                2
+            )
 
         # Display the frame in the video feed
         # NOTE: `cv2.imshow` takes images in BGR
