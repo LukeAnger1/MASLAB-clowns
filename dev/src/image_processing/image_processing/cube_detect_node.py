@@ -26,84 +26,86 @@ class CubeDetect(Node):
         # self.cube_image_pub = self.create_publisher(CompressedImage, "cube_image/compressed", 10)
         self.cube_image_pub = self.create_publisher(PixelLocations, "cube_locations/pixel_locations", 10)
 
-    def compute_distance(self, image):
+    def get_possible_pixel_locations_with_blur(self, image):
         """
-        Compute the distance of the block, given an image
+        Detect green and red objects in the image while reducing noise.
+        IMPORTANT: The lists it returns are (x, y, w, h), not (x, y)
+            Use on the display with boxes
         """
-        # Convert the image to HSV
+        # Convert the image to HSV color space
         hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-        green_lower = np.array([40, 40, 40])  # Lower bound for green color
-        green_upper = np.array([80, 255, 255])  # Upper bound for green color
+        # Apply Gaussian blur to reduce noise
+        blur_factor = 7
+        blurred_image = cv2.GaussianBlur(hsv_image, (blur_factor, blur_factor), 0)
 
-        # IMPORTANT TODO: We need to fine tune this to hit the red/green cubes, this mask isnt hitting the contours
-        # Apply a mask to the image
-        mask_green = cv2.inRange(
-            hsv_image,
-            green_lower,
-            green_upper
-            # np.array([60, 100, 100]),
-            # np.array([90, 200, 200])
-        )
-
-        # Define the lower and upper bounds for red color
+        # Define color ranges
+        green_lower = np.array([40, 40, 40])
+        green_upper = np.array([80, 255, 255])
         lower_red1 = np.array([0, 100, 100])
         upper_red1 = np.array([10, 255, 255])
         lower_red2 = np.array([160, 100, 100])
         upper_red2 = np.array([179, 255, 255])
 
-        # Create masks for the two red ranges
-        mask1 = cv2.inRange(hsv_image, lower_red1, upper_red1)
-        mask2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
+        # Create masks
+        mask_green = cv2.inRange(blurred_image, green_lower, green_upper)
+        mask_red = cv2.inRange(blurred_image, lower_red1, upper_red1) + cv2.inRange(blurred_image, lower_red2, upper_red2)
 
-        # Combine the masks to detect both ranges of red
-        mask_red = mask1 + mask2
+        # Apply morphological operations
+        kernel = np.ones((5, 5), np.uint8)
+        mask_green = cv2.erode(mask_green, kernel, iterations=1)
+        mask_green = cv2.dilate(mask_green, kernel, iterations=2)
+        mask_red = cv2.erode(mask_red, kernel, iterations=1)
+        mask_red = cv2.dilate(mask_red, kernel, iterations=2)
 
-        # Apply the mask to the image
-        result = cv2.bitwise_and(image, image, mask=mask_red)
+        # Find contours
+        contours_green, _ = cv2.findContours(mask_green, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours_red, _ = cv2.findContours(mask_red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        contours, _ = cv2.findContours(mask_green, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        # filtered_green = filter_overlapping_contours(contours_green)
+        # filtered_red = filter_overlapping_contours(contours_red)
 
-        self.get_logger().info(f'right before the contours')
+        answer_green, answer_red = [], []
 
-        # Check contours
-        if contours:
-            # Get the largest contour
-            max_contour = max(contours, key=cv2.contourArea)
+        # Filter contours by size
+        for contour in contours_green:
+            area = cv2.contourArea(contour)
+            if area < 500:  # Filter out small contours
+                continue
+            x, y, w, h = cv2.boundingRect(contour)
+            answer_green.append((x + w//2, y+h))
 
-            self.get_logger().info(f'getting the bounding rectanlges')
-            # Find the bounding rectangle
-            x, y, w, h = cv2.boundingRect(max_contour)
-            self.get_logger().info(f'after getting the bounding recctangles')
-            # Calculate the contour width, in pixels
-            width = np.sqrt(cv2.contourArea(max_contour))
+        for contour in contours_red:
+            area = cv2.contourArea(contour)
+            if area < 500:  # Filter out small contours
+                continue
+            x, y, w, h = cv2.boundingRect(contour)
+            answer_red.append((x+w//2, y+h))
 
-            # Get the frame width, in pixels
-            frame_width = image.shape[1]
-        
-            # Calculate the object's distance from its width (centimeters)
-            if width != 0:
-                self.get_logger().info(f'the width is not zero')
-                distance = OBJECT_WIDTH * frame_width / width * CALIBRATION * 100
-            else:
-                self.get_logger().info(f'the width is zero')
-                distance = None
 
-            return distance, x, y, w, h
-        
-        return None, None, None, None, None
+        return answer_green, answer_red
+
+    def convert_pixel_location_to_int32(self, x, y):
+        # Convert to int 32
+        x, y = np.int32(x), np.int32(y)
+
+        # Add this number to gaurantee they are always positive when doing the encoding
+        shift = 1 << 15
+        x, y = x+shift, y+shift
+
+        return np.int32((x << 16) + y)
 
     def image_callback(self, msg: CompressedImage):
         frame = self.bridge.compressed_imgmsg_to_cv2(msg, "bgr8")  
 
-        holder = self.compute_distance(frame)
+        green_pixels, red_pixels = self.get_possible_pixel_locations_with_blur(frame)
 
         # cube_image_msg = self.bridge.cv2_to_compressed_imgmsg(frame)
 
         pixels_msg = PixelLocations()
         
-        pixels_msg.green_pixel_locations = [7]
-        pixels_msg.red_pixel_locations = [8]
+        pixels_msg.green_pixel_locations = [self.convert_pixel_location_to_int32(*pixel) for pixel in green_pixels]
+        pixels_msg.red_pixel_locations = [self.convert_pixel_location_to_int32(*pixel) for pixel in red_pixels]
 
         self.cube_image_pub.publish(pixels_msg)
 

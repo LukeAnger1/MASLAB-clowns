@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'cube_detect = image_processing.cube_detect_node:main'
+            'cube_detect = image_processing.cube_detect_node:main',
+            'cube_locate = image_processing.cube_locate_node:main'
         ],
     },
 )

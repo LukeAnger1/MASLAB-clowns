@@ -1,0 +1,2 @@
+int32[] green_locations # This is a 32 bit inch location representation, the first 16 bits represent the x and the last 16 bits represent the y. This is for the colors green
+int32[] red_locations # This is the same thing but for red
