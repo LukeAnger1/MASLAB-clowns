@@ -13,27 +13,28 @@ class MapGeneratorNode(Node):
         # create a publisher object to send data
         self.optimal_map_location_pub = self.create_publisher(MapLocations, "cube_locations/optimize_map_locations", 10)
 
-        self.number_sub = self.create_subscription(MapLocations, "cube_locations/map_locations", self.map_callback, 10)
+        self.map_location_sub = self.create_subscription(MapLocations, "cube_locations/map_locations", self.map_callback, 10)
 
     def map_callback(self, msg):
-        # # this function is called whenever a number is received.
+        # IMPORTANT TODO: Keep track of previous maps and use that data to remove cubes that are misidentified and use previous readings average for a better prediction
 
-        # number = msg.data 
+        green_x_locations = msg.green_x_locations
+        green_y_locations = msg.green_y_locations
+        red_x_locations = msg.red_x_locations
+        red_y_locations = msg.red_y_locations
 
-        # fizzbuzz_str = self.fizzbuzz(number)
-        # # loginfo to print the string to the terminal
-        # self.get_logger().info(fizzbuzz_str)
+        # IMPORTANT TODO: Code here to add in blocks that are tmeporarily not seen but remembered or misidentifications
 
-        # fizzbuzz_msg = FizzBuzz()
-        # fizzbuzz_msg.fizzbuzz = fizzbuzz_str
-        # fizzbuzz_msg.fizz_ratio = 0 # TODO fill in this value
-        # fizzbuzz_msg.buzz_ratio = 0 # TODO fill in this value
-        # fizzbuzz_msg.fizzbuzz_ratio = 0 # TODO fill in this value
-        # fizzbuzz_msg.number_total = 0 # TODO fill in this value
+        # IMPORTANT TODO: Code here to add in blocks that are tmeporarily not seen but remembered or misidentifications
 
-        # # publish the message
-        # self.fizzbuzz_pub.publish(fizzbuzz_msg)
-        pass
+        msg = MapLocations()
+        msg.green_x_locations = green_x_locations
+        msg.green_y_locations = green_y_locations
+        msg.red_x_locations = red_x_locations
+        msg.red_y_locations = red_y_locations
+
+        # publish the message
+        self.optimal_map_location_pub(msg)
 
 def main(args=None):
     rclpy.init()
