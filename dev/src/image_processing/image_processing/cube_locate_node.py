@@ -33,7 +33,7 @@ class CubeLocate(Node):
 
         self.h, err = cv2.findHomography(np_pts_image, np_pts_ground)
 
-        self.image_sub = self.create_subscription(PixelLocations, "cube_locations/pixel_locations", self.image_callback, 10)
+        self.image_sub = self.create_subscription(PixelLocations, "cube_locations/pixel_locations", self.transform_callback, 10)
         self.cube_image_pub = self.create_publisher(MapLocations, "cube_locations/map_locations", 10)
 
     def transformUvToXy(self, u, v):
@@ -73,7 +73,7 @@ class CubeLocate(Node):
 
         return (x, y)
 
-    def image_callback(self, msg: PixelLocations):
+    def transform_callback(self, msg: PixelLocations):
         # Calculate pixel of the center of the bottom of the cube.
         # NOTE: This is already done in the previous node
 
