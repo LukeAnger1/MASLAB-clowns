@@ -16,6 +16,51 @@ CALIBRATION = 1
 # Object width (meters)
 OBJECT_WIDTH = 8.48e-2
 
+def filter_overlapping_contours(contours, overlap_threshold=0.7):
+    """
+    Filters out contours that overlap more than a specified percentage with larger contours.
+    The overlap threshold determines the percentage of the smaller box that must overlap to be removed.
+    
+    Parameters:
+    - contours: List of contours to filter.
+    - overlap_threshold: Fraction (0.0 to 1.0) of overlap required to discard a box.
+    
+    Returns:
+    - A list of filtered contours.
+    """
+    filtered_contours = []
+    bounding_boxes = [cv2.boundingRect(c) for c in contours]
+
+    # Loop through each bounding box
+    for i, bbox in enumerate(bounding_boxes):
+        x1, y1, w1, h1 = bbox
+        keep = True
+
+        for j, other_bbox in enumerate(bounding_boxes):
+            if i == j:
+                continue
+
+            x2, y2, w2, h2 = other_bbox
+
+            # Calculate the intersection area
+            intersection_x = max(0, min(x1 + w1, x2 + w2) - max(x1, x2))
+            intersection_y = max(0, min(y1 + h1, y2 + h2) - max(y1, y2))
+            intersection_area = intersection_x * intersection_y
+
+            # Calculate the area of the smaller box
+            smaller_area = w1 * h1
+
+            # Check if the overlap exceeds the threshold
+            if intersection_area / smaller_area > overlap_threshold:
+                keep = False
+                break
+
+        if keep:
+            filtered_contours.append(contours[i])
+
+    return filtered_contours
+
+
 class CubeDetect(Node):
 
     def __init__(self):
@@ -32,6 +77,8 @@ class CubeDetect(Node):
         IMPORTANT: The lists it returns are (x, y, w, h), not (x, y)
             Use on the display with boxes
         """
+        
+
         # Convert the image to HSV color space
         hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
@@ -62,20 +109,20 @@ class CubeDetect(Node):
         contours_green, _ = cv2.findContours(mask_green, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours_red, _ = cv2.findContours(mask_red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-        # filtered_green = filter_overlapping_contours(contours_green)
-        # filtered_red = filter_overlapping_contours(contours_red)
+        filtered_green = filter_overlapping_contours(contours_green)
+        filtered_red = filter_overlapping_contours(contours_red)
 
         answer_green, answer_red = [], []
 
         # Filter contours by size
-        for contour in contours_green:
+        for contour in filtered_green:
             area = cv2.contourArea(contour)
             if area < 500:  # Filter out small contours
                 continue
             x, y, w, h = cv2.boundingRect(contour)
             answer_green.append((x + w//2, y+h))
 
-        for contour in contours_red:
+        for contour in filtered_red:
             area = cv2.contourArea(contour)
             if area < 500:  # Filter out small contours
                 continue
@@ -84,6 +131,7 @@ class CubeDetect(Node):
 
 
         return answer_green, answer_red
+    
 
     def convert_pixel_location_to_int32(self, x, y):
         # Add this number to gaurantee they are always positive when doing the encoding
