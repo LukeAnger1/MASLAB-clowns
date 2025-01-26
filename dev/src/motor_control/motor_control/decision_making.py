@@ -12,27 +12,40 @@ class DecisionNode(Node):
         # create a publisher object to send data
         self.motor_destination = self.create_publisher(GoalDestination, "motor_control/goal_destination", 10)
 
-        self.number_sub = self.create_subscription(MapLocations, "cube_locations/optimize_map_locations", self.map_generator, 10)
+        self.optimized_map_sub = self.create_subscription(MapLocations, "cube_locations/optimize_map_locations", self.map_generator, 10)
+
+        # NOTE: This is so it drives forward on the start to find a green block
+        self.closest_green = (0, 69)
+
+    def distance_squared(self, x1, y1, x2=0, y2=0):
+        """
+        This function returns the distance squared between these 2 points
+        """
+        return (x1-x2)**2+(y1-y2)**2
 
     def map_generator(self, msg):
-        # # this function is called whenever a number is received.
+        # After updating the map this will update the goal destination for the motors
 
-        # number = msg.data 
+        green_x_locations = msg.green_x_locations
+        green_y_locations = msg.green_y_locations
+        red_x_locations = msg.red_x_locations
+        red_y_locations = msg.red_y_locations
 
-        # fizzbuzz_str = self.fizzbuzz(number)
-        # # loginfo to print the string to the terminal
-        # self.get_logger().info(fizzbuzz_str)
+        # For now we are only going to go to the closest green block
+        current_min_dist = 100000000
+        for green_x, green_y in zip(green_x_locations, green_y_locations):
+            possible_min_dist = self.distance_squared(green_x, green_y)
+            if (possible_min_dist < current_min_dist):
+                current_min_dist = possible_min_dist
+                self.closest_green = (green_x, green_y)
 
-        # fizzbuzz_msg = FizzBuzz()
-        # fizzbuzz_msg.fizzbuzz = fizzbuzz_str
-        # fizzbuzz_msg.fizz_ratio = 0 # TODO fill in this value
-        # fizzbuzz_msg.buzz_ratio = 0 # TODO fill in this value
-        # fizzbuzz_msg.fizzbuzz_ratio = 0 # TODO fill in this value
-        # fizzbuzz_msg.number_total = 0 # TODO fill in this value
+        msg = GoalDestination()
 
-        # # publish the message
-        # self.fizzbuzz_pub.publish(fizzbuzz_msg)
-        pass
+        msg.x = self.closest_green[0]
+        msg.y = self.closest_green[1]
+
+        # publish the message
+        self.motor_destination(msg)
 
 def main(args=None):
     rclpy.init()
