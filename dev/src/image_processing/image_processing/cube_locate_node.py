@@ -75,6 +75,9 @@ class CubeLocate(Node):
     
     def convert_map_location_to_int32(self, x, y):
         
+        # Convert them to integers
+        x, y = int(x), int(y)
+
         # Add this number to gaurantee they are always positive when doing the encoding
         shift = 1 << 15
         shift = np.int32(shift)
