@@ -57,20 +57,20 @@ def get_possible_pixel_locations_with_blur(image):
     contours_green, _ = cv2.findContours(mask_green, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours_red, _ = cv2.findContours(mask_red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    # filtered_green = filter_overlapping_contours(contours_green)
-    # filtered_red = filter_overlapping_contours(contours_red)
+    filtered_green = filter_overlapping_contours(contours_green)
+    filtered_red = filter_overlapping_contours(contours_red)
 
     answer_green, answer_red = [], []
 
     # Filter contours by size
-    for contour in contours_green:
+    for contour in filtered_green:
         area = cv2.contourArea(contour)
         if area < 500:  # Filter out small contours
             continue
         x, y, w, h = cv2.boundingRect(contour)
         answer_green.append((x, y, w, h))
 
-    for contour in contours_red:
+    for contour in filtered_red:
         area = cv2.contourArea(contour)
         if area < 500:  # Filter out small contours
             continue
@@ -82,12 +82,49 @@ def get_possible_pixel_locations_with_blur(image):
 
    
 
-def filter_overlapping_contours(contours):
-    '''
-    Takes in a list of contours
-    TO DO: eliminate overlapping boxes, keeping the biggest area
-    '''
-    pass
+def filter_overlapping_contours(contours, overlap_threshold=0.7):
+    """
+    Filters out contours that overlap more than a specified percentage with larger contours.
+    The overlap threshold determines the percentage of the smaller box that must overlap to be removed.
+    
+    Parameters:
+    - contours: List of contours to filter.
+    - overlap_threshold: Fraction (0.0 to 1.0) of overlap required to discard a box.
+    
+    Returns:
+    - A list of filtered contours.
+    """
+    filtered_contours = []
+    bounding_boxes = [cv2.boundingRect(c) for c in contours]
+
+    # Loop through each bounding box
+    for i, bbox in enumerate(bounding_boxes):
+        x1, y1, w1, h1 = bbox
+        keep = True
+
+        for j, other_bbox in enumerate(bounding_boxes):
+            if i == j:
+                continue
+
+            x2, y2, w2, h2 = other_bbox
+
+            # Calculate the intersection area
+            intersection_x = max(0, min(x1 + w1, x2 + w2) - max(x1, x2))
+            intersection_y = max(0, min(y1 + h1, y2 + h2) - max(y1, y2))
+            intersection_area = intersection_x * intersection_y
+
+            # Calculate the area of the smaller box
+            smaller_area = w1 * h1
+
+            # Check if the overlap exceeds the threshold
+            if intersection_area / smaller_area > overlap_threshold:
+                keep = False
+                break
+
+        if keep:
+            filtered_contours.append(contours[i])
+
+    return filtered_contours
 
 def display_pixels_with_boxes(pixels, color):
     '''
