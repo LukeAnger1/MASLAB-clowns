@@ -1,0 +1,22 @@
+# Whenever you make changes make sure to run the below in the dev folder
+
+## colcon build
+
+# This will build the project so it can run (if you change the code but dont rebuild your changes wont take effect)
+
+# IMPORTANT NOTE:
+# Before running any ros2 command you need to run the below in your terminal (if you make a new terminal you need to do this again)
+
+## source install/setup.bash
+
+# This command sets up all the dependencies to be able to launch nodes from the terminal
+
+# See CAMERA_NOTES to be able to start the camera nodes for ros
+
+# To start the node that takes in camera input and returns the location of blocks in terms of pixels run the below
+
+## ros2 run image_processing cube_detect
+
+# To start the node that takes this cube detect information and returns predicted locations in terms of x in and y in for red and green blocks run the below
+
+## ros2 run image_processing cube_locate

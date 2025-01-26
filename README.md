@@ -11,3 +11,6 @@ tmux is good for running publisher and subscriber at the same time
 
 RULES:
 1. Branch off of main, do not push to main or do your own PR. If u have questions about this ask the asshole on the team
+
+HOW TO RUN:
+See STARTUP_NOTES for information on how to start the ros nodes
