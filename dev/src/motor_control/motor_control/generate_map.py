@@ -34,7 +34,7 @@ class MapGeneratorNode(Node):
         msg.red_y_locations = red_y_locations
 
         # publish the message
-        self.optimal_map_location_pub(msg)
+        self.optimal_map_location_pub.publish(msg)
 
 def main(args=None):
     rclpy.init()

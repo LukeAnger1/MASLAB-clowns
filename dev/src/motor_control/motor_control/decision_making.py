@@ -45,7 +45,7 @@ class DecisionNode(Node):
         msg.y = self.closest_green[1]
 
         # publish the message
-        self.motor_destination(msg)
+        self.motor_destination.publish(msg)
 
 def main(args=None):
     rclpy.init()
