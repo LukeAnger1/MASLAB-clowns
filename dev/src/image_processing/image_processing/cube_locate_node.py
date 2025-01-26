@@ -72,18 +72,6 @@ class CubeLocate(Node):
             x += 65536
 
         return (x, y)
-    
-    def convert_map_location_to_int32(self, x, y):
-        
-        # Convert them to integers
-        x, y = int(x), int(y)
-
-        # Add this number to gaurantee they are always positive when doing the encoding
-        shift = 1 << 15
-        shift = np.int32(shift)
-        x, y = x+shift, y+shift
-
-        return np.int32((x << 16) + y)
 
     def image_callback(self, msg: PixelLocations):
         # Calculate pixel of the center of the bottom of the cube.
@@ -100,16 +88,18 @@ class CubeLocate(Node):
         # This is test code
         # self.get_logger().info(f'the green pixel locations are {green_pixels}\nthe red pixel locations are {red_pixels}')
 
-        green_map_location = (self.transformUvToXy(pixel[0], pixel[1]) for pixel in green_pixels)
-        red_map_location = (self.transformUvToXy(pixel[0], pixel[1]) for pixel in red_pixels)
+        green_map_locations = (self.transformUvToXy(pixel[0], pixel[1]) for pixel in green_pixels)
+        red_map_locations = (self.transformUvToXy(pixel[0], pixel[1]) for pixel in red_pixels)
 
         # This is test code
-        # self.get_logger().info(f'the green pixel map locations are {[value for value in green_map_location]}\nthe red pixel map locations are {[value for value in red_map_location]}')
-        self.get_logger().info(f'G: {[value for value in green_map_location]}')
+        self.get_logger().info(f'G: {[value for value in green_map_locations]}')
+        self.get_logger().info(f'R: {[value for value in red_map_locations]}')
 
         msg = MapLocations()
-        msg.green_locations = [self.convert_map_location_to_int32(*map_location) for map_location in green_map_location]
-        msg.red_locations = (self.convert_map_location_to_int32(*map_location) for map_location in red_map_location)
+        msg.green_x_locations = (map_location[0] for map_location in green_map_locations)
+        msg.green_y_locations = (map_location[1] for map_location in green_map_locations)
+        msg.red_x_locations = (map_location[0] for map_location in red_map_locations)
+        msg.red_y_locations = (map_location[1] for map_location in red_map_locations)
 
         self.cube_image_pub.publish(msg)
 
