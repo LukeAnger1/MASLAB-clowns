@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 
 from pixels_interfaces.msg import MapLocations
+from decision_interfaces.msg import GoalDestination
 
 class DecisionNode(Node):
     def __init__(self):
@@ -9,10 +10,8 @@ class DecisionNode(Node):
         self.get_logger().info("Starting the decision node")
 
         # create a publisher object to send data
-        # IMPROTANT NOTE: Need to make a different custom message for publishing
-        self.motor_destination = self.create_publisher(MapLocations, "motor_control/goal_destination", 10)
+        self.motor_destination = self.create_publisher(GoalDestination, "motor_control/goal_destination", 10)
 
-        # TODO fill in the TOPIC_NAME and MESSAGE_TYPE
         self.number_sub = self.create_subscription(MapLocations, "cube_locations/optimize_map_locations", self.map_generator, 10)
 
     def map_generator(self, msg):

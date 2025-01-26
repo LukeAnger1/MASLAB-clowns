@@ -1,15 +1,14 @@
 import rclpy
 from rclpy.node import Node
 
-from pixels_interfaces.msg import MapLocations
+from decision_interfaces.msg import GoalDestination
 
 class DriveNode(Node):
     def __init__(self):
         super().__init__('drive_node')
         self.get_logger().info("Starting the drive node")
 
-        # IMPROTANT TODO: Change this message type
-        self.number_sub = self.create_subscription(MapLocations, "motor_control/goal_destination", self.update_motors, 10)
+        self.number_sub = self.create_subscription(GoalDestination, "motor_control/goal_destination", self.update_motors, 10)
 
     def update_motors(self, msg):
         # # this function is called whenever a number is received.
