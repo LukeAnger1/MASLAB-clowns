@@ -34,6 +34,7 @@ class MapGeneratorNode(Node):
         msg.red_y_locations = red_y_locations
 
         # publish the message
+        self.get_logger().info("Publishing the optimized map")
         self.optimal_map_location_pub.publish(msg)
 
 def main(args=None):

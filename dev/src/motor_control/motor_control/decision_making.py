@@ -44,6 +44,7 @@ class DecisionNode(Node):
         msg.x = self.closest_green[0]
         msg.y = self.closest_green[1]
 
+        self.get_logger().info(f'publishing the goal destination')
         # publish the message
         self.motor_destination.publish(msg)
 
