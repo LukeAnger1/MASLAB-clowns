@@ -98,14 +98,18 @@ class CubeLocate(Node):
         # NOTE: This is currently being done in the previous node
 
         # This is test code
-        self.get_logger().info(f'the green pixel locations are {green_pixels}\nthe red pixel locations are {red_pixels}')
+        # self.get_logger().info(f'the green pixel locations are {green_pixels}\nthe red pixel locations are {red_pixels}')
 
-        msg = MapLocations()
-        msg.green_locations = [self.convert_map_location_to_int32(*self.transformUvToXy(pixel[0], pixel[1])) for pixel in green_pixels]
-        msg.red_locations = [self.convert_map_location_to_int32(*self.transformUvToXy(pixel[0], pixel[1])) for pixel in red_pixels]
+        green_map_location = (self.transformUvToXy(pixel[0], pixel[1]) for pixel in green_pixels)
+        red_map_location = (self.transformUvToXy(pixel[0], pixel[1]) for pixel in red_pixels)
 
         # This is test code
-        self.get_logger().info(f'the green pixel map locations are {msg.green_locations}\nthe red pixel map locations are {msg.red_locations}')
+        # self.get_logger().info(f'the green pixel map locations are {[value for value in green_map_location]}\nthe red pixel map locations are {[value for value in red_map_location]}')
+        self.get_logger().info(f'G: {[value for value in green_map_location]}')
+
+        msg = MapLocations()
+        msg.green_locations = [self.convert_map_location_to_int32(*map_location) for map_location in green_map_location]
+        msg.red_locations = (self.convert_map_location_to_int32(*map_location) for map_location in red_map_location)
 
         self.cube_image_pub.publish(msg)
 
