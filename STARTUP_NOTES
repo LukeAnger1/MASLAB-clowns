@@ -13,7 +13,7 @@
 
 ## ros2 launch motor_control motor_control_launch.py 
 
-# Done: Below is OLD CODE. RIGHT NOW we only have 3 nodes in the launch file -- to edit you must alter multi-node-launch.py in the src>image_processing>launch folder. Add a new node there.
+# Done: Below is OLD CODE. RIGHT NOW we only have 3 nodes in the launch file -- to edit you must alter package_name_launch.py in the src>package_name>launch folder. Add a new node there.
 
 
 
