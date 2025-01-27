@@ -11,7 +11,7 @@ import math
 from time import sleep
 
 # This constant is how much to scale the angles by
-RADIANS_MULTIPLIER = 1
+RADIANS_MULTIPLIER = 10
 
 class DriveNode(Node):
     def __init__(self):
@@ -50,34 +50,36 @@ class DriveNode(Node):
 
     def run_motors(self):
         # Apply PID control to dynamically adjust speed
-        error = self.goal_speed - self.current_speed
+        error = self.goal_speed# - self.current_speed
         self.integral += error
         derivative = error - self.previous_error
 
-        adjustment = (
-            self.kp * error +
-            self.ki * self.integral +
-            self.kd * derivative
-        )
+        # adjustment = (
+        #     self.kp * error +
+        #     self.ki * self.integral +
+        #     self.kd * derivative
+        # )
         self.previous_error = error
+
+        adjustment = 0
 
         # Calculate angle-adjusted speeds
         angle_measurement = self.angle * RADIANS_MULTIPLIER
-        motor1_speed = 20 #max(0, self.goal_speed - angle_measurement + adjustment)
-        motor2_speed = 20 #max(0, self.goal_speed + angle_measurement + adjustment)
+        motor1_speed = max(0, self.goal_speed - angle_measurement + adjustment)
+        motor2_speed = max(0, self.goal_speed + angle_measurement + adjustment)
 
         # Configure motor 1
         raven_board.set_motor_mode(Raven.MotorChannel.CH4, Raven.MotorMode.DIRECT)
-        raven_board.set_motor_torque_factor(Raven.MotorChannel.CH4, 50)
+        raven_board.set_motor_torque_factor(Raven.MotorChannel.CH4, 15)
         raven_board.set_motor_speed_factor(Raven.MotorChannel.CH4, motor1_speed)
 
         # Configure motor 2
         raven_board.set_motor_mode(Raven.MotorChannel.CH5, Raven.MotorMode.DIRECT)
-        raven_board.set_motor_torque_factor(Raven.MotorChannel.CH5, 50)
+        raven_board.set_motor_torque_factor(Raven.MotorChannel.CH5, 15)
         raven_board.set_motor_speed_factor(Raven.MotorChannel.CH5, motor2_speed, reverse=True)
 
         self.get_logger().info(f"Running Motors: Motor1 Speed={motor1_speed}, Motor2 Speed={motor2_speed}")
-        sleep(1)  # Pause for stability
+        sleep(.01)  # Pause for stability
 
     def shutdown_motors(self):
         self.get_logger().info("Shutting down motors...")
