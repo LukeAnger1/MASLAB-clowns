@@ -9,7 +9,7 @@ import cv2
 import numpy as np
 
 # Capture video from webcam
-capture = cv2.VideoCapture(1)
+capture = cv2.VideoCapture(0)
 
 if not capture.isOpened():
     print("Error: Could not access the webcam.")
