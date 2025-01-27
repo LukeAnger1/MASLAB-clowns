@@ -88,8 +88,8 @@ class CubeLocate(Node):
         # This is test code
         # self.get_logger().info(f'the green pixel locations are {green_pixels}\nthe red pixel locations are {red_pixels}')
 
-        green_map_locations = (self.transformUvToXy(pixel[0], pixel[1]) for pixel in green_pixels)
-        red_map_locations = (self.transformUvToXy(pixel[0], pixel[1]) for pixel in red_pixels)
+        green_map_locations = [self.transformUvToXy(pixel[0], pixel[1]) for pixel in green_pixels]
+        red_map_locations = [self.transformUvToXy(pixel[0], pixel[1]) for pixel in red_pixels]
 
         # This is test code
         self.get_logger().info(f'G: {[value for value in green_map_locations]}')
@@ -100,6 +100,8 @@ class CubeLocate(Node):
         msg.green_y_locations = (map_location[1] for map_location in green_map_locations)
         msg.red_x_locations = (map_location[0] for map_location in red_map_locations)
         msg.red_y_locations = (map_location[1] for map_location in red_map_locations)
+
+        # self.get_logger().info(f'in the locate the green x locations are {msg.green_x_locations} while the actual ones are {(map_location[0] for map_location in green_map_locations)}')
 
         self.cube_image_pub.publish(msg)
 

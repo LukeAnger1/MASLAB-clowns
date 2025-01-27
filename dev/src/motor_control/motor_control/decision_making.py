@@ -26,6 +26,8 @@ class DecisionNode(Node):
     def map_generator(self, msg):
         # After updating the map this will update the goal destination for the motors
 
+        self.get_logger().info(f'the green x locations {msg.green_x_locations} of type {type(msg.green_x_locations)}')
+
         green_x_locations = msg.green_x_locations
         green_y_locations = msg.green_y_locations
         red_x_locations = msg.red_x_locations
@@ -33,7 +35,9 @@ class DecisionNode(Node):
 
         # For now we are only going to go to the closest green block
         current_min_dist = 100000000
+        # self.get_logger().info(f'the green x locations {green_x_locations}')
         for green_x, green_y in zip(green_x_locations, green_y_locations):
+            # self.get_logger().info(f'the green possible location is ({green_x}, {green_y})')
             possible_min_dist = self.distance_squared(green_x, green_y)
             if (possible_min_dist < current_min_dist):
                 current_min_dist = possible_min_dist
