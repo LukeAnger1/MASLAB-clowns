@@ -26,7 +26,7 @@ class MapGeneratorNode(Node):
         # IMPORTANT TODO: Code here to add in blocks that are tmeporarily not seen but remembered or misidentifications
 
         # IMPORTANT TODO: Code here to add in blocks that are tmeporarily not seen but remembered or misidentifications
-
+        # self.get_logger().info(f'the green x locations about to be published are {green_x_locations[0]}')
         msg = MapLocations()
         msg.green_x_locations = green_x_locations
         msg.green_y_locations = green_y_locations
