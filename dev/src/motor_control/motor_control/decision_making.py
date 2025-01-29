@@ -4,6 +4,8 @@ from rclpy.node import Node
 from pixels_interfaces.msg import MapLocations
 from decision_interfaces.msg import GoalDestination
 
+import time
+
 class DecisionNode(Node):
     def __init__(self):
         super().__init__('decision_node')
@@ -17,6 +19,9 @@ class DecisionNode(Node):
         # NOTE: This is so it drives forward on the start to find a green block
         self.closest_green = (0, 69)
 
+        # This is the start time
+        self.start_time = int(time.time())
+
     def distance_squared(self, x1, y1, x2=0, y2=0):
         """
         This function returns the distance squared between these 2 points
@@ -24,6 +29,12 @@ class DecisionNode(Node):
         return (x1-x2)**2+(y1-y2)**2
 
     def map_generator(self, msg):
+
+        # Check if the game if over with the time
+        if (time.time() - self.start_time) > 150:
+            self.get_logger().info(f'We hit the 230 mark on the time')
+            return
+
         # After updating the map this will update the goal destination for the motors
 
         self.get_logger().info(f'the green x locations {msg.green_x_locations} of type {type(msg.green_x_locations)}')
