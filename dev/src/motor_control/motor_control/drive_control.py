@@ -14,7 +14,7 @@ from time import sleep
 RADIANS_MULTIPLIER = 20
 
 # This is a constant to check if we are turning or driving forward
-EPISOLON_ANGLE = 0.1
+EPISOLON_ANGLE = 0.5
 
 class DriveNode(Node):
     def __init__(self):
@@ -27,7 +27,7 @@ class DriveNode(Node):
         # These are values to control driving at basic level
         self.drive = False
         self.angle = 0
-        self.goal_speed = 20
+        self.goal_speed = 30
 
         # PID control parameters
         self.kp = 0.5  # Proportional gain
@@ -66,6 +66,8 @@ class DriveNode(Node):
         self.previous_error = error
 
         adjustment = 0
+
+        self.get_logger().warning(f'the angle is {self.angle}')
 
         # If angle is straight enough
         if (abs(self.angle) < EPISOLON_ANGLE):
