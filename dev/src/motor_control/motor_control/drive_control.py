@@ -14,7 +14,7 @@ from time import sleep
 RADIANS_MULTIPLIER = 20
 
 # This is a constant to check if we are turning or driving forward
-EPISOLON_ANGLE = 0.5
+EPISOLON_ANGLE = 0.7
 
 class DriveNode(Node):
     def __init__(self):
@@ -116,7 +116,7 @@ class DriveNode(Node):
             raven_board.set_motor_speed_factor(Raven.MotorChannel.CH5, turn_goal_speed, reverse=(sign))
 
         # self.get_logger().info(f"Running Motors: Motor1 Speed={motor1_speed}, Motor2 Speed={motor2_speed}")
-        sleep(.1)  # Pause for stability
+        sleep(.4)  # Pause for stability
 
     def shutdown_motors(self):
         self.get_logger().info("Shutting down motors...")
