@@ -12,9 +12,9 @@ class DecisionNode(Node):
         self.get_logger().info("Starting the decision node")
 
         # create a publisher object to send data
-        self.motor_destination = self.create_publisher(GoalDestination, "motor_control/goal_destination", 10)
+        self.motor_destination = self.create_publisher(GoalDestination, "motor_control/goal_destination", 1)
 
-        self.optimized_map_sub = self.create_subscription(MapLocations, "cube_locations/optimize_map_locations", self.map_generator, 10)
+        self.optimized_map_sub = self.create_subscription(MapLocations, "cube_locations/optimize_map_locations", self.map_generator, 1)
 
         # NOTE: This is so it drives forward on the start to find a green block
         self.closest_green = (0, 69)
