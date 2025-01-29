@@ -37,7 +37,7 @@ class DecisionNode(Node):
 
         # After updating the map this will update the goal destination for the motors
 
-        self.get_logger().info(f'the green x locations {msg.green_x_locations} of type {type(msg.green_x_locations)}')
+        # self.get_logger().info(f'the green x locations {msg.green_x_locations} of type {type(msg.green_x_locations)}')
 
         green_x_locations = msg.green_x_locations
         green_y_locations = msg.green_y_locations
@@ -59,7 +59,7 @@ class DecisionNode(Node):
         msg.x = self.closest_green[0]
         msg.y = self.closest_green[1]
 
-        self.get_logger().info(f'publishing the goal destination. x: {msg.x}, y: {msg.y} ')
+        # self.get_logger().info(f'publishing the goal destination. x: {msg.x}, y: {msg.y} ')
         # publish the message
         self.motor_destination.publish(msg)
 
