@@ -11,7 +11,7 @@ import math
 from time import sleep
 
 # This constant is how much to scale the angles by
-RADIANS_MULTIPLIER = 10
+RADIANS_MULTIPLIER = 20
 
 class DriveNode(Node):
     def __init__(self):
@@ -44,6 +44,7 @@ class DriveNode(Node):
             self.angle = 0
         else:
             self.angle = math.atan(goal_x / goal_y)
+            self.get_logger().info(f"the angle is {self.angle}")
 
         self.drive = True
         self.run_motors()
@@ -70,16 +71,16 @@ class DriveNode(Node):
 
         # Configure motor 1
         raven_board.set_motor_mode(Raven.MotorChannel.CH4, Raven.MotorMode.DIRECT)
-        raven_board.set_motor_torque_factor(Raven.MotorChannel.CH4, 15)
+        raven_board.set_motor_torque_factor(Raven.MotorChannel.CH4, 85)
         raven_board.set_motor_speed_factor(Raven.MotorChannel.CH4, motor1_speed)
 
         # Configure motor 2
         raven_board.set_motor_mode(Raven.MotorChannel.CH5, Raven.MotorMode.DIRECT)
-        raven_board.set_motor_torque_factor(Raven.MotorChannel.CH5, 15)
+        raven_board.set_motor_torque_factor(Raven.MotorChannel.CH5, 85)
         raven_board.set_motor_speed_factor(Raven.MotorChannel.CH5, motor2_speed, reverse=True)
 
         self.get_logger().info(f"Running Motors: Motor1 Speed={motor1_speed}, Motor2 Speed={motor2_speed}")
-        sleep(.01)  # Pause for stability
+        sleep(.1)  # Pause for stability
 
     def shutdown_motors(self):
         self.get_logger().info("Shutting down motors...")

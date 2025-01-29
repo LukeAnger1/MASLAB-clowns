@@ -8,7 +8,7 @@ raven_board = Raven()
 START_POSITION = 0
 TARGET_POSITION = 2000  # 2000 is good for dropping, 1450 is good for throwing
 REVERSE_SPEED = 50       # Fixed slow speed for reversing
-RECOVERY_OFFSET = 200   #OFFSET for returning to original position
+RECOVERY_OFFSET = 100   #OFFSET for returning to original position
 
 # Reset encoder at the start
 raven_board.set_motor_encoder(Raven.MotorChannel.CH1, 0)
