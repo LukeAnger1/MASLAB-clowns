@@ -6,19 +6,19 @@ import rclpy
 from rclpy.node import Node
 
 # This is the image plain directly from rqt pixels
-PTS_IMAGE_PLANE = [[371, 424],
-                    [366, 326],
-                    [222, 379],
-                    [217, 74],
-                    [345, 21]
+PTS_IMAGE_PLANE = [[431, 234],
+                   [188, 339],
+                   [593, 216],
+                   [408, 223],
+                    [391, 152]
                    ]
 
 # This is the measured plain in inches
-PTS_GROUND_PLANE = [[0, 1],
-                    [0, 3],
-                    [-3, 2],
-                    [-3, 9],
-                    [0, 10]
+PTS_GROUND_PLANE = [[5+3/4, 36],
+                    [5+3/4-12, 36],
+                    [17+3/4, 48],
+                    [5+3/4-12, 48],
+                    [5+3/4-12, 60]
                     ]
 
 class CubeLocate(Node):
