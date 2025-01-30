@@ -27,7 +27,7 @@ class DriveNode(Node):
         # These are values to control driving at basic level
         self.drive = False
         self.angle = 0
-        self.goal_speed = 35
+        self.goal_speed = 25
 
         # PID control parameters
         self.kp = 0.5  # Proportional gain
@@ -103,7 +103,7 @@ class DriveNode(Node):
             # This is a sign to be able to flip the motors faster
             sign = self.angle < 0
 
-            turn_goal_speed =35
+            turn_goal_speed =25
 
             # Configure motor 1
             raven_board.set_motor_mode(Raven.MotorChannel.CH4, Raven.MotorMode.DIRECT)
