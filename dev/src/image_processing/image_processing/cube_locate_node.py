@@ -35,8 +35,8 @@ class CubeLocate(Node):
 
         self.h, err = cv2.findHomography(np_pts_image, np_pts_ground)
 
-        self.image_sub = self.create_subscription(PixelLocations, "cube_locations/pixel_locations", self.transform_callback, 10)
-        self.cube_image_pub = self.create_publisher(MapLocations, "cube_locations/map_locations", 10)
+        self.image_sub = self.create_subscription(PixelLocations, "cube_locations/pixel_locations", self.transform_callback, 1)
+        self.cube_image_pub = self.create_publisher(MapLocations, "cube_locations/map_locations", 1)
 
     def transformUvToXy(self, u, v):
         """

@@ -67,9 +67,9 @@ class CubeDetect(Node):
         self.bridge = CvBridge()
         super().__init__('cube_detect')
 
-        self.image_sub = self.create_subscription(CompressedImage, "image_raw/compressed", self.image_callback, 10)
+        self.image_sub = self.create_subscription(CompressedImage, "image_raw/compressed", self.image_callback, 1)
         # self.cube_image_pub = self.create_publisher(CompressedImage, "cube_image/compressed", 10)
-        self.cube_image_pub = self.create_publisher(PixelLocations, "cube_locations/pixel_locations", 10)
+        self.cube_image_pub = self.create_publisher(PixelLocations, "cube_locations/pixel_locations", 1)
 
     def get_possible_pixel_locations_with_blur(self, image):
         """

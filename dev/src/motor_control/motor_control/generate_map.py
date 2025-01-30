@@ -11,9 +11,9 @@ class MapGeneratorNode(Node):
         self.get_logger().info("Starting the map generator")
 
         # create a publisher object to send data
-        self.optimal_map_location_pub = self.create_publisher(MapLocations, "cube_locations/optimize_map_locations", 10)
+        self.optimal_map_location_pub = self.create_publisher(MapLocations, "cube_locations/optimize_map_locations", 1)
 
-        self.map_location_sub = self.create_subscription(MapLocations, "cube_locations/map_locations", self.map_callback, 10)
+        self.map_location_sub = self.create_subscription(MapLocations, "cube_locations/map_locations", self.map_callback, 1)
 
     def map_callback(self, msg):
         # IMPORTANT TODO: Keep track of previous maps and use that data to remove cubes that are misidentified and use previous readings average for a better prediction

@@ -17,7 +17,7 @@ class DecisionNode(Node):
         self.optimized_map_sub = self.create_subscription(MapLocations, "cube_locations/optimize_map_locations", self.map_generator, 1)
 
         # NOTE: This is so it drives forward on the start to find a green block
-        self.closest_green = (0, 69)
+        self.closest_green = (float(0), float(69))
 
         # This is the start time
         self.start_time = int(time.time())

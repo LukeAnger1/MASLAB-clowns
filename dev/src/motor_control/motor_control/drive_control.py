@@ -11,7 +11,7 @@ import math
 from time import sleep
 
 # This constant is how much to scale the angles by
-RADIANS_MULTIPLIER = 20
+RADIANS_MULTIPLIER = 5
 
 # This is a constant to check if we are turning or driving forward
 EPISOLON_ANGLE = 0.7
@@ -27,7 +27,7 @@ class DriveNode(Node):
         # These are values to control driving at basic level
         self.drive = False
         self.angle = 0
-        self.goal_speed = 30
+        self.goal_speed = 25
 
         # PID control parameters
         self.kp = 0.5  # Proportional gain
@@ -116,7 +116,7 @@ class DriveNode(Node):
             raven_board.set_motor_speed_factor(Raven.MotorChannel.CH5, turn_goal_speed, reverse=(sign))
 
         # self.get_logger().info(f"Running Motors: Motor1 Speed={motor1_speed}, Motor2 Speed={motor2_speed}")
-        sleep(.2)  # Pause for stability
+        sleep(.1)  # Pause for stability
 
     def shutdown_motors(self):
         self.get_logger().info("Shutting down motors...")
