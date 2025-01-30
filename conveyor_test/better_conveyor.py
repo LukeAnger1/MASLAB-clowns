@@ -7,7 +7,7 @@ raven_board = Raven()
 # Define encoder limits
 START_POSITION = 0
 TARGET_POSITION = 2000  # 2000 is good for dropping, 1450 is good for throwing
-REVERSE_SPEED = 50       # Fixed slow speed for reversing
+REVERSE_SPEED = 30       # Fixed slow speed for reversing
 RECOVERY_OFFSET = 100   #OFFSET for returning to original position
 
 # Reset encoder at the start
@@ -33,6 +33,12 @@ while True:
             while raven_board.get_motor_encoder(Raven.MotorChannel.CH1) > (START_POSITION + 200):
                 print(f"Encoder: {raven_board.get_motor_encoder(Raven.MotorChannel.CH1)}")
                 time.sleep(0.1)
+
+            # Set a wait to return to position
+            time.sleep(.2)
+
+            # Reset the motor encoder
+            raven_board.set_motor_encoder(Raven.MotorChannel.CH1, 0)
 
             move_motor(0)  # Stop motor
             print("Returned to start position.")

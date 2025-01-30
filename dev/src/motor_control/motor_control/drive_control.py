@@ -27,7 +27,7 @@ class DriveNode(Node):
         # These are values to control driving at basic level
         self.drive = False
         self.angle = 0
-        self.goal_speed = 25
+        self.goal_speed = 35
 
         # PID control parameters
         self.kp = 0.5  # Proportional gain

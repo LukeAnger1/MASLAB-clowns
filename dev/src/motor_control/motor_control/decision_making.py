@@ -17,7 +17,7 @@ class DecisionNode(Node):
         self.optimized_map_sub = self.create_subscription(MapLocations, "cube_locations/optimize_map_locations", self.map_generator, 1)
 
         # NOTE: This is so it drives forward on the start to find a green block
-        self.closest_green = (float(0), float(69))
+        # self.closest_green = (float(0), float(69))
 
         # This is the start time
         self.start_time = int(time.time())
@@ -46,18 +46,24 @@ class DecisionNode(Node):
 
         # For now we are only going to go to the closest green block
         current_min_dist = 100000000
+        closest_green = None
         # self.get_logger().info(f'the green x locations {green_x_locations}')
         for green_x, green_y in zip(green_x_locations, green_y_locations):
             # self.get_logger().info(f'the green possible location is ({green_x}, {green_y})')
             possible_min_dist = self.distance_squared(green_x, green_y)
             if (possible_min_dist < current_min_dist):
                 current_min_dist = possible_min_dist
-                self.closest_green = (green_x, green_y)
+                closest_green = (green_x, green_y)
 
         msg = GoalDestination()
 
-        msg.x = self.closest_green[0]
-        msg.y = self.closest_green[1]
+        if closest_green is not None:
+            msg.x = closest_green[0]
+            msg.y = closest_green[1]
+        else:
+            # This is so it turns to search
+            msg.x = float(69)
+            msg.y = float(0)
 
         # self.get_logger().info(f'publishing the goal destination. x: {msg.x}, y: {msg.y} ')
         # publish the message
