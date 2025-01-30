@@ -65,6 +65,10 @@ class DecisionNode(Node):
             msg.x = float(69)
             msg.y = float(0)
 
+        if int((time.time() - self.start_time)) % 10 < 1:
+            msg.x = float(0)
+            msg.y = float(-1)
+
         # self.get_logger().info(f'publishing the goal destination. x: {msg.x}, y: {msg.y} ')
         # publish the message
         self.motor_destination.publish(msg)

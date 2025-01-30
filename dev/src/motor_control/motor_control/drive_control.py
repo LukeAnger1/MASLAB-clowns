@@ -9,6 +9,7 @@ raven_board = Raven()
 
 import math
 from time import sleep
+import time
 
 # This constant is how much to scale the angles by
 RADIANS_MULTIPLIER = 5
@@ -40,6 +41,10 @@ class DriveNode(Node):
         goal_x = msg.x
         goal_y = msg.y
         # self.get_logger().info(f"Updating Motor Values. x: {goal_x}, y: {goal_y}")
+
+        if goal_y == -1:
+            self.chechy_bs()
+            return
 
         # Safety check to avoid division by zero
         if np.absolute(goal_y) < 0.05:
@@ -118,6 +123,40 @@ class DriveNode(Node):
         # self.get_logger().info(f"Running Motors: Motor1 Speed={motor1_speed}, Motor2 Speed={motor2_speed}")
         sleep(.1)  # Pause for stability
 
+    # Function to set motor speed and direction
+    def move_motor(self, speed, reverse=False):
+        raven_board.set_motor_mode(Raven.MotorChannel.CH1, Raven.MotorMode.DIRECT)
+        raven_board.set_motor_torque_factor(Raven.MotorChannel.CH1, 50)  # Fixed torque
+        raven_board.set_motor_speed_factor(Raven.MotorChannel.CH1, speed, reverse= not reverse)
+
+    # Main control loop
+    def chechy_bs(self):
+
+        speed_percent = int(50)
+        if 0 <= speed_percent <= 100:
+            motor_speed = speed_percent / 100 * 100  # Scale speed to 0-100%
+            self.move_motor(motor_speed)
+
+            # Move motor until it reaches the target position
+            while raven_board.get_motor_encoder(Raven.MotorChannel.CH1) < TARGET_POSITION:
+                time.sleep(0.1)
+
+            self.move_motor(0)  # Stop motor at target
+
+        self.move_motor(REVERSE_SPEED, reverse=True)
+
+            # Move motor down until it reaches the start position
+        while raven_board.get_motor_encoder(Raven.MotorChannel.CH1) > (START_POSITION + 200):
+            time.sleep(0.1)
+
+        # Set a wait to return to position
+        time.sleep(.5)
+
+        # Reset the motor encoder
+        raven_board.set_motor_encoder(Raven.MotorChannel.CH1, 0)
+
+        self.move_motor(0)  # Stop motor
+
     def shutdown_motors(self):
         self.get_logger().info("Shutting down motors...")
 
@@ -127,6 +166,9 @@ class DriveNode(Node):
 
         raven_board.set_motor_mode(Raven.MotorChannel.CH5, Raven.MotorMode.DIRECT)
         raven_board.set_motor_speed_factor(Raven.MotorChannel.CH5, 0)
+
+        raven_board.set_motor_mode(Raven.MotorChannel.CH1, Raven.MotorMode.DIRECT)
+        raven_board.set_motor_speed_factor(Raven.MotorChannel.CH1, 0)
 
         self.get_logger().info("Motors have been shut down.")
 
