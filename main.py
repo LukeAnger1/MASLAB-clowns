@@ -426,11 +426,33 @@ def main():
     drive_control = DriveNode()
 
     while True:
-        
-        hmm = cube_detect.image_callback(img)
-        hmm = cube_locate.transform_callback(hmm)
-        hmm = decision_node.map_generator(hmm)
-        hmm = drive_control.update_motors(hmm)
+
+        # Open the camera device
+        cap = cv2.VideoCapture('/dev/grey', cv2.CAP_V4L2)
+
+        frame = None
+
+        if not cap.isOpened():
+            print("Error: Could not open camera")
+        else:
+            ret, frame = cap.read()  # Capture a single frame
+            if ret:
+                # filename = "captured_image.jpg"
+                # cv2.imwrite(filename, frame)  # Save the image
+                # print(f"Image saved as {filename}")
+                pass
+            else:
+                print("Error: Could not read frame")
+
+
+        if frame is not None:
+            hmm = cube_detect.image_callback(frame)
+            hmm = cube_locate.transform_callback(hmm)
+            hmm = decision_node.map_generator(hmm)
+            hmm = drive_control.update_motors(hmm)
+
+    cap.release()  # Release the camera
+
 
 if __name__ == '__main__':
     main()
