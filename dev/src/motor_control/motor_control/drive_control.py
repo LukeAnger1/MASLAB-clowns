@@ -36,6 +36,8 @@ class DriveNode(Node):
         self.previous_error = 0
         self.integral = 0
 
+        self.is_block = False
+
     def update_motors(self, msg):
         goal_x = msg.x
         goal_y = msg.y
@@ -48,6 +50,8 @@ class DriveNode(Node):
         else:
             self.angle = math.atan(goal_x / goal_y)
             # self.get_logger().info(f"the angle is {self.angle}")
+
+        self.is_block = msg.is_block
 
         self.drive = True
         self.run_motors()
@@ -70,7 +74,7 @@ class DriveNode(Node):
         self.get_logger().warning(f'the angle is {self.angle}')
 
         # If angle is straight enough
-        if (abs(self.angle) < EPISOLON_ANGLE):
+        if (abs(self.angle) < EPISOLON_ANGLE) and self.is_block:
             # Go straighter
             self.get_logger().warning("Going stragiht ish")
 

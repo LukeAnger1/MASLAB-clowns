@@ -60,10 +60,12 @@ class DecisionNode(Node):
         if closest_green is not None:
             msg.x = closest_green[0]
             msg.y = closest_green[1]
+            msg.is_block = True
         else:
             # This is so it turns to search
-            msg.x = float(69)
-            msg.y = float(0)
+            msg.x = 0
+            msg.y = 0
+            msg.is_block = False
 
         # self.get_logger().info(f'publishing the goal destination. x: {msg.x}, y: {msg.y} ')
         # publish the message
