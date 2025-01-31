@@ -1,4 +1,4 @@
-# MASLAB-clown-pen-#15
+# MASLAB-clowns
 This is our 2025 MASLAB github repo. Our team name is clown penis and we are going to bring it!!!
 
 NOTES:
